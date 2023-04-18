@@ -1,9 +1,12 @@
 import { Application } from "https://deno.land/x/oak/mod.ts";
+import * as edgedb from 'https://deno.land/x/edgedb/mod.ts'
 
+const client = edgedb.createClient()
 const app = new Application();
 
-app.use((ctx) => {
-  ctx.response.body = "Hello world!";
+app.use(async (ctx) => {
+  const result = await client.query(`Select "Hello world!"`)
+  ctx.response.body = result;
 });
 
 await app.listen({ port: 8000 });
